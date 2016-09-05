@@ -6,6 +6,9 @@ MAINTAINER Enosh Yu
 RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 RUN rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
 
+# install httpd
+RUN yum -y install httpd vim-enhanced bash-completion unzip
+
 # install supervisord
 RUN yum install -y python-pip && pip install "pip>=1.4,<1.5" --upgrade
 RUN pip install supervisor
