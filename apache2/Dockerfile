@@ -1,25 +1,18 @@
 #apache2
-FROM centos:6.8
+FROM webdevops/apache:centos-7
+
 MAINTAINER Enosh Yu
 
-# install http
-RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-RUN rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
+ARG PHP_SOCKET="php-fpm:9000"
 
-# install httpd
-RUN yum -y install httpd vim-enhanced bash-completion unzip
+ENV WEB_PHP_SOCKET=$PHP_SOCKET
 
-# install supervisord
-RUN yum install -y python-pip && pip install "pip>=1.4,<1.5" --upgrade
-RUN pip install supervisor
+ENV WEB_DOCUMENT_ROOT=/var/www/html
 
-# install sshd
-RUN yum install -y openssh-server openssh-clients passwd
+EXPOSE 80 443
 
-RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key && ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key 
-RUN sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config && echo 'root:changeme' | chpasswd
+WORKDIR /var/www
 
+ENTRYPOINT ["/opt/docker/bin/entrypoint.sh"]
 
-ADD supervisord.conf /etc/
-EXPOSE 22 80
-CMD ["supervisord", "-n"]
+CMD ["supervisord"]
