@@ -1,0 +1,59 @@
+version: '1'
+
+services:
+
+### Workspace Utilities Container ###########################
+
+    workspace:
+        build: ./workspace
+        volumes_from:
+            - volumes_source
+        extra_hosts:
+            # IMPORTANT: Replace with your Docker Host IP (will be appended to /etc/hosts)
+            - "dockerhost:192.168.99.100"
+        tty: true
+        
+### PHP-FPM Container #######################################
+
+    php-fpm:
+        build: ./php-fpm
+        volumes_from:
+            - volumes_source
+        expose:
+            - "9000"
+        links:
+            - workspace
+        extra_hosts:
+            # IMPORTANT: Replace with your Docker Host IP (will be appended to /etc/hosts)
+            - "dockerhost:192.168.99.100"
+            
+### Apache Server Container ##################################
+
+    apache2:
+        build:
+            context: ./apache2
+            args:
+                - PHP_SOCKET="php-fpm:9000"
+        volumes_from:
+            - volumes_source
+        volumes:
+            - ./logs/apache2:/var/log/apache2
+        ports:
+            - "80:80"
+            - "443:443"
+        links:
+            - php-fpm
+
+### MySQL Container #########################################
+
+    mysql:
+        build: ./mysql
+        ports:
+            - "3306:3306"
+
+### PHP Application Code Container ######################
+
+    volumes_source:
+        build: ./volumes/application
+        volumes:
+            - ../my-php-app:/var/www
