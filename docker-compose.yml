@@ -12,37 +12,20 @@ services:
             # IMPORTANT: Replace with your Docker Host IP (will be appended to /etc/hosts)
             - "dockerhost:192.168.99.100"
         tty: true
-        
-### PHP-FPM Container #######################################
-
-    php-fpm:
-        build: ./php-fpm
-        volumes_from:
-            - volumes_source
-        expose:
-            - "9000"
-        links:
-            - workspace
-        extra_hosts:
-            # IMPORTANT: Replace with your Docker Host IP (will be appended to /etc/hosts)
-            - "dockerhost:192.168.99.100"
             
 ### Apache Server Container ##################################
 
     apache2:
-        build:
-            context: ./apache2
-            args:
-                - PHP_SOCKET="php-fpm:9000"
+        build: ./apache2
+
         volumes_from:
             - volumes_source
         volumes:
             - ./logs/apache2:/var/log/apache2
         ports:
             - "80:80"
-            - "443:443"
         links:
-            - php-fpm
+            - workspace
 
 ### MySQL Container #########################################
 
