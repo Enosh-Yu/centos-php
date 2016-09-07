@@ -12,9 +12,9 @@ RUN echo "NETWORKING=yes" > /etc/sysconfig/network
 RUN service mysqld start
 
 # install supervisord
-RUN yum install -y python-pip && pip install "pip>=1.4,<1.5" --upgrade
-RUN pip install supervisor
+# RUN yum install -y python-pip && pip install "pip>=1.4,<1.5" --upgrade
+# RUN pip install supervisor
 
-CMD ["supervisord"]
+# CMD ["supervisord", "-n"]
 
 EXPOSE 3306

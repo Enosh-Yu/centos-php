@@ -1,57 +1,35 @@
-FROM centos:latest
+FROM centos:6.8
+MAINTAINER Thatcher Peskens <thatcher@koffiedik.net>
 
-RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
-    yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm && \
-    yum install yum-utils && \
-    yum-config-manager --enable remi-php70 && \
-    yum update -y && \
-    yum install -y \
-    php70-php.x86_64 \
-    php70-php-bcmath.x86_64 \
-    php70-php-cli.x86_64 \
-    php70-php-common.x86_64 \
-    php70-php-devel.x86_64 \
-    php70-php-gd.x86_64 \
-    php70-php-intl.x86_64 \
-    php70-php-json.x86_64 \
-    php70-php-mbstring.x86_64 \
-    php70-php-mcrypt.x86_64 \
-    php70-php-mysqlnd.x86_64 \
-    php70-php-pdo.x86_64 \
-    php70-php-pear.noarch \
-    php70-php-xml.x86_64 \
-    php70-php-ast.x86_64 \
-    php70-php-opcache.x86_64 \
-    php70-php-pecl-zip.x86_64 \
-    php70-php-pecl-memcached.x86_64 && \
-    ln -s /usr/bin/php70 /usr/bin/php && \
-    ln -s /etc/opt/remi/php70/php.ini /etc/php.ini && \
-    ln -s /etc/opt/remi/php70/php.d /etc/php.d && \
-    ln -s /etc/opt/remi/php70/pear.conf /etc/pear.conf && \
-    ln -s /etc/opt/remi/php70/pear /etc/pear
+# install http
+RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+RUN rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
 
+# install httpd
+RUN yum -y install httpd vim-enhanced bash-completion unzip
 
-RUN yum install -y httpd-devel.x86_64 nano wget memcached git unzip
+# install php
+# RUN yum install -y php php-mysql php-devel php-gd php-pecl-memcache php-pspell php-snmp php-xmlrpc php-xml
+# RUN yum install -y php56w php56w-cli php56w-common php56w-mbstring php56w-mcrypt php56w-mysqlnd php56w-pdo php56w-fpm php56w-xml
+RUN yum install -y php56w php56w-cli php56w-common php56w-mbstring php56w-mcrypt php56w-mysql php56w-pdo php56w-fpm php56w-xml
+# install supervisord
+RUN yum install -y python-pip && pip install "pip>=1.4,<1.5" --upgrade
+RUN pip install supervisor
 
-RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+# install sshd
+RUN yum install -y openssh-server openssh-clients passwd
 
-RUN usermod -u 1000 apache && ln -sf /dev/stdout /var/log/httpd/access_log && ln -sf /dev/stderr /var/log/httpd/error_log
+RUN ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key && ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key 
+RUN sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config && echo 'root:changeme' | chpasswd
 
-RUN unlink /etc/localtime && ln -s /usr/share/zoneinfo/Europe/London /etc/localtime
+#install composer
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
 
-RUN rm /etc/httpd/conf.d/welcome.conf \
-    && sed -i -e "s/Options\ Indexes\ FollowSymLinks/Options\ -Indexes\ +FollowSymLinks/g" /etc/httpd/conf/httpd.conf \
-    && sed -i "s/\/var\/www\/html/\/var\/www/g" /etc/httpd/conf/httpd.conf \
-    && echo "FileETag None" >> /etc/httpd/conf/httpd.conf \
-    && sed -i -e "s/expose_php\ =\ On/expose_php\ =\ Off/g" /etc/php.ini \
-    && sed -i -e "s/\;error_log\ =\ php_errors\.log/error_log\ =\ \/var\/log\/php_errors\.log/g" /etc/php.ini \
-    && echo "ServerTokens Prod" >> /etc/httpd/conf/httpd.conf \
-    && echo "ServerSignature Off" >> /etc/httpd/conf/httpd.conf
+RUN sed -i "s/DirectoryIndex index.php/DirectoryIndex index.php index.htm index.html/g" /etc/httpd/conf.d/php.conf
+RUN echo "AddType application/x-httpd-php .htm .html" >> /etc/httpd/conf.d/php.conf
 
-WORKDIR /var/www
-
+ADD phpinfo.php /var/www/html/
+ADD supervisord.conf /etc/
 EXPOSE 80 443
-
-COPY ./httpd.sh /httpd.sh
-
-CMD "/httpd.sh"
+CMD ["supervisord", "-n"]

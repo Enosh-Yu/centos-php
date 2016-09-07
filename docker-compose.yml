@@ -8,11 +8,8 @@ services:
         build: ./workspace
         volumes_from:
             - volumes_source
-        extra_hosts:
-            # IMPORTANT: Replace with your Docker Host IP (will be appended to /etc/hosts)
-            - "dockerhost:192.168.99.100"
         tty: true
-            
+
 ### Apache Server Container ##################################
 
     apache2:
@@ -26,6 +23,7 @@ services:
             - "80:80"
         links:
             - workspace
+            - mysql
 
 ### MySQL Container #########################################
 
