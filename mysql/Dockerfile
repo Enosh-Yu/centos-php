@@ -1,20 +1,27 @@
-#mysql
+# "ported" by Adam Miller <maxamillion@fedoraproject.org> from
+#   https://github.com/fedora-cloud/Fedora-Dockerfiles
+#
+# Originally written for Fedora-Dockerfiles by
+#   scollier <scollier@redhat.com>
+
 FROM centos:6.8
-MAINTAINER Enosh Yu
+MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
-RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-RUN rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
 
-# install mysql
-RUN yum install -y mysql mysql-server
-RUN echo "NETWORKING=yes" > /etc/sysconfig/network
-# start mysqld to create initial tables
-RUN service mysqld start
+RUN yum -y update; yum clean all
+RUN yum -y install epel-release; yum clean all
+RUN yum -y install mysql-server mysql pwgen supervisor bash-completion psmisc net-tools; yum clean all
 
-# install supervisord
-# RUN yum install -y python-pip && pip install "pip>=1.4,<1.5" --upgrade
-# RUN pip install supervisor
+ADD ./start.sh /start.sh
+ADD ./config_mysql.sh /config_mysql.sh
+ADD ./supervisord.conf /etc/supervisord.conf
 
-# CMD ["supervisord", "-n"]
+# RUN echo %sudo	ALL=NOPASSWD: ALL >> /etc/sudoers
+
+RUN chmod 755 /start.sh
+RUN chmod 755 /config_mysql.sh
+RUN /config_mysql.sh
 
 EXPOSE 3306
+
+CMD ["/bin/bash", "/start.sh"]
