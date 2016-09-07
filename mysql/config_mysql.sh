@@ -12,6 +12,7 @@ chown -R mysql:mysql /var/lib/mysql
 sleep 10
 }
 
+#여기에다가 추가하자. mysql user, password, db
 __start_mysql() {
 echo "Running the start_mysql function."
 mysqladmin -u root password mysqlPassword

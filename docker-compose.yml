@@ -24,6 +24,7 @@ services:
         links:
             - workspace
             - mysql
+            - mysql:database
 
 ### MySQL Container #########################################
 
