@@ -32,6 +32,10 @@ services:
         build: ./mysql
         ports:
             - "3306:3306"
+        environment:
+            MYSQL_DATABASE: my_php_app
+            MYSQL_USER: my_php_app
+            MYSQL_PASSWORD: pAsSwOrD
 
 ### PHP Application Code Container ######################
 

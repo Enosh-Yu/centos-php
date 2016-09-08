@@ -16,12 +16,17 @@ ADD ./start.sh /start.sh
 ADD ./config_mysql.sh /config_mysql.sh
 ADD ./supervisord.conf /etc/supervisord.conf
 
+ADD ./entry.sh /entry.sh
+
 # RUN echo %sudo	ALL=NOPASSWD: ALL >> /etc/sudoers
 
 RUN chmod 755 /start.sh
 RUN chmod 755 /config_mysql.sh
+RUN chmod 755 /entry.sh
 RUN /config_mysql.sh
 
 EXPOSE 3306
+
+ENTRYPOINT ["/bin/bash", "/entry.sh"]
 
 CMD ["/bin/bash", "/start.sh"]
