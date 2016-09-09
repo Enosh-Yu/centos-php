@@ -7,6 +7,11 @@
 FROM centos:6.8
 MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
+ARG MYSQL_ROOT_PASSWORD="secret"
+ENV MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+
+ARG MYSQL_DATABASE="my_php_app"
+ENV MYSQL_DATABASE=$MYSQL_DATABASE
 
 RUN yum -y update; yum clean all
 RUN yum -y install epel-release; yum clean all
@@ -16,17 +21,12 @@ ADD ./start.sh /start.sh
 ADD ./config_mysql.sh /config_mysql.sh
 ADD ./supervisord.conf /etc/supervisord.conf
 
-ADD ./entry.sh /entry.sh
-
 # RUN echo %sudo	ALL=NOPASSWD: ALL >> /etc/sudoers
 
 RUN chmod 755 /start.sh
 RUN chmod 755 /config_mysql.sh
-RUN chmod 755 /entry.sh
 RUN /config_mysql.sh
 
 EXPOSE 3306
-
-ENTRYPOINT ["/bin/bash", "/entry.sh"]
 
 CMD ["/bin/bash", "/start.sh"]
