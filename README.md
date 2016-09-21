@@ -5,3 +5,6 @@
 ##Base image
 
 centos:6.8
+
+
+##컨테이너
