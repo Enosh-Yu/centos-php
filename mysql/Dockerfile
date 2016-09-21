@@ -13,6 +13,12 @@ ENV MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
 ARG MYSQL_DATABASE="my_php_app"
 ENV MYSQL_DATABASE=$MYSQL_DATABASE
 
+ARG MYSQL_USER="my_php_app"
+ENV MYSQL_USER=$MYSQL_USER
+
+ARG MYSQL_PASSWORD="pAsSwOrD"
+ENV MYSQL_PASSWORD=$MYSQL_PASSWORD
+
 RUN yum -y update; yum clean all
 RUN yum -y install epel-release; yum clean all
 RUN yum -y install mysql-server mysql pwgen supervisor bash-completion psmisc net-tools; yum clean all
