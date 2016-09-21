@@ -3,4 +3,5 @@
 그래서 docker를 이용해서 centos 기반으로 php 개발환경을 만들어 보려고 합니다.
 
 ##Base image
-> centos:6.8
+
+centos:6.8
