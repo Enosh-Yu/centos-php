@@ -34,8 +34,8 @@ services:
             args:
                 MYSQL_ROOT_PASSWORD: secret
                 MYSQL_DATABASE: my_php_app
-                # MYSQL_USER: my_php_app
-                # MYSQL_PASSWORD: pAsSwOrD
+                MYSQL_USER: my_php_app
+                MYSQL_PASSWORD: pAsSwOrD
         ports:
             - "3306:3306"
 
