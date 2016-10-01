@@ -10,7 +10,7 @@
 centos:6.8
 
 
-##컨테이너
+##Containers
 1. apache2 - 아파치2 및 php5.6
 2. mysql
 3. volumes/application -데이터 볼륨 
