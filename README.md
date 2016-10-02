@@ -17,6 +17,6 @@ centos:6.8
 ##사용방법
 프로젝트 디렉토리에서 
 
-`  
-docker-compose up -d  
-`
+```
+docker-compose up -d
+```
