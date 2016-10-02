@@ -16,9 +16,10 @@ __start_mysql() {
 echo "Running the start_mysql function."
 mysqladmin -u root password $MYSQL_ROOT_PASSWORD
 mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE $MYSQL_DATABASE"
-mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO 'testdb'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
-mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_DATABASE'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+
+mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "create user '$MYSQL_USER'@'%' identified by '$MYSQL_PASSWORD';"
+mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "grant all privileges on $MYSQL_DATABASE.* to '$MYSQL_USER'@'%'; FLUSH PRIVILEGES;"
 mysql -uroot -p$MYSQL_ROOT_PASSWORD -e "select user, host FROM mysql.user;"
 killall mysqld
 sleep 10
