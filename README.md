@@ -3,7 +3,7 @@
 그래서 docker를 이용해서 centos 기반으로 php 개발환경을 만들어봤습니다.
 
 ##Requirements
-- docker 및 docker-compose
+- [docker](https://www.docker.com/) 및 [docker-compose](https://docs.docker.com/compose/)
 
 ##Base image
 centos:6.8
