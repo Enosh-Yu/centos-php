@@ -8,7 +8,6 @@
 ##Base image
 centos:6.8
 
-
 ##Containers
 1. apache2 - 아파치2 및 php5.6
 2. mysql
@@ -19,5 +18,7 @@ centos:6.8
 프로젝트 디렉토리에서 
 
 `
+
 docker-compose up -d
-` 
+
+`
