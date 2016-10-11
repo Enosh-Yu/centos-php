@@ -24,6 +24,7 @@ docker-compose up -d
 docker-compose.yml 에서 my-php-app 대신에 자신의 프로젝트 디렉토리로 변경하면 됩니다.
 
 아래의 mysql 컨테이너 변수들도 값을 변경해서 사용할 수 있습니다. 
+
 MYSQL_ROOT_PASSWORD
 MYSQL_DATABASE
 MYSQL_USER
