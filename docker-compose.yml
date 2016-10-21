@@ -8,6 +8,9 @@ services:
         build: ./workspace
         volumes_from:
             - volumes_source
+        links:
+            - mysql
+            - mysql:database
         tty: true
 
 ### Apache Server Container ##################################
@@ -44,4 +47,4 @@ services:
     volumes_source:
         build: ./volumes/application
         volumes:
-            - ../my-php-app:/var/www
+            - ../xpressengine:/var/www/html

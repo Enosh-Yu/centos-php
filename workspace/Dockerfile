@@ -7,7 +7,7 @@ RUN rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
 
 # install php
 # RUN yum install -y php php-mysql php-devel php-gd php-pecl-memcache php-pspell php-snmp php-xmlrpc php-xml
-RUN yum install -y php56w php56w-cli php56w-common php56w-mbstring php56w-mcrypt php56w-mysql php56w-pdo php56w-fpm php56w-xml
+RUN yum install -y php56w php56w-cli php56w-common php56w-mbstring php56w-mcrypt php56w-mysql php56w-pdo php56w-fpm php56w-xml php56w-gd
 
 # Install composer and add its bin to the PATH.
 RUN curl -s http://getcomposer.org/installer | php && \

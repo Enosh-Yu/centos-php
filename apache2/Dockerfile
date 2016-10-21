@@ -11,7 +11,7 @@ RUN yum -y install httpd vim-enhanced bash-completion unzip
 # install php
 # RUN yum install -y php php-mysql php-devel php-gd php-pecl-memcache php-pspell php-snmp php-xmlrpc php-xml
 # RUN yum install -y php56w php56w-cli php56w-common php56w-mbstring php56w-mcrypt php56w-mysqlnd php56w-pdo php56w-fpm php56w-xml
-RUN yum install -y php56w php56w-cli php56w-common php56w-mbstring php56w-mcrypt php56w-mysql php56w-pdo php56w-fpm php56w-xml
+RUN yum install -y php56w php56w-cli php56w-common php56w-mbstring php56w-mcrypt php56w-mysql php56w-pdo php56w-fpm php56w-xml php56w-gd
 # install supervisord
 RUN yum install -y python-pip && pip install "pip>=1.4,<1.5" --upgrade
 RUN pip install supervisor
